@@ -1,0 +1,30 @@
+{
+  "name": "snake",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "dependencies": {
+    "ts-loader": "^2.0.0",
+    "typescript": "^2.1.6",
+    "webpack": "^2.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/syraz37/snake.git"
+  },
+  "keywords": [
+    "snake",
+    "game",
+    "online"
+  ],
+  "author": "Suraj Shrestha",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/syraz37/snake/issues"
+  },
+  "homepage": "https://github.com/syraz37/snake#readme"
+}
