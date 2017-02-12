@@ -1,11 +1,12 @@
-const CONST = require("./constants.js");
+import CONST = require("./constants");
 
-module.exports = new Canvas();
+export = new Canvas();
 
 function Canvas() {
     var canvas = this;
 
-    canvas.context = document.getElementById('canvas').getContext('2d');
+    var canvasElement = <HTMLCanvasElement> document.getElementById("canvas");
+    canvas.context = canvasElement.getContext('2d');
 
     canvas.init = function(draw) {
         var windowWidth = window.innerWidth - 20,

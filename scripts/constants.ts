@@ -1,4 +1,4 @@
-module.exports = {
+export = {
     GRID_SIZE: 48,
     SNAKE_SIZE: 30,
     SNAKE_COLOR: "#FF0000",

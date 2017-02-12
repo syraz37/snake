@@ -1,9 +1,9 @@
-const CONST = require("./constants.js");
+import CONST = require("./constants");
 
-module.exports = new Snake();
+export = new Snake();
 
 function Snake() {
-    snake = this;
+    var snake = this;
     snake.head = null;
     snake.tail = null;
     snake.direction = null;
@@ -73,7 +73,7 @@ function Snake() {
             snake.head.next = neck;
             neck.prev = snake.head;
         } else {
-            return; false
+            return false;
         }
 
         canvas.drawSquare(snake.head.x * canvas.gridWidth, snake.head.y * canvas.gridWidth, canvas.gridWidth, CONST.SNAKE_COLOR);

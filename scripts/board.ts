@@ -1,6 +1,6 @@
-const CONST = require("./constants.js");
+import CONST = require("./constants");
 
-module.exports = new Board();
+export = new Board();
 
 function Board() {
     var board = this;

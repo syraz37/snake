@@ -1,10 +1,10 @@
+import canvas = require("./canvas");
+import board = require("./board");
+import snake = require("./snake");
+import game = require("./game");
+import CONST = require("./constants");
+
 (function() {
-    var canvas = require("./canvas.js"),
-        board = require("./board.js"),
-        snake = require("./snake.js"),
-        game = require("./game.js");
-        
-    const CONST = require("./constants.js");
 
     snake.create(board.getGrid());
 
