@@ -13,6 +13,7 @@ function Canvas() {
             windowHeight = window.innerHeight - 20;
             
         canvas.width = Math.min(windowHeight, windowWidth);
+        canvas.width = canvas.width - (canvas.width % CONST.GRID_SIZE);
         canvas.gridWidth = canvas.width / CONST.GRID_SIZE;
         
         canvas.context.canvas.width = canvas.width;
