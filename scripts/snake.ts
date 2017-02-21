@@ -7,7 +7,7 @@ function Snake() {
     snake.head = null;
     snake.tail = null;
     snake.direction = null;
-    snake.nextDirection = null;
+    snake.nextDirection = [];
 
     snake.create = function(boardGrid) {
         // snake.head = boardGrid[1][1];
@@ -29,14 +29,13 @@ function Snake() {
     };
 
     snake.changeDirection = function(keyCode) {
-        if(keyCode === CONST.KEY.UP && snake.direction != CONST.KEY.DOWN) {
-            snake.nextDirection = CONST.KEY.UP;
-        } else if(keyCode === CONST.KEY.DOWN && snake.direction != CONST.KEY.UP) {
-            snake.nextDirection = CONST.KEY.DOWN;
-        } else if(keyCode === CONST.KEY.LEFT && snake.direction != CONST.KEY.RIGHT) {
-            snake.nextDirection = CONST.KEY.LEFT;
-        } else if(keyCode === CONST.KEY.RIGHT && snake.direction != CONST.KEY.LEFT) {
-            snake.nextDirection = CONST.KEY.RIGHT;
+        if(snake.nextDirection.length === 1 || (!snake.nextDirection.length && (
+            (keyCode === CONST.KEY.UP && snake.direction != CONST.KEY.DOWN) ||
+            (keyCode === CONST.KEY.DOWN && snake.direction != CONST.KEY.UP) ||
+            (keyCode === CONST.KEY.LEFT && snake.direction != CONST.KEY.RIGHT) ||
+            (keyCode === CONST.KEY.RIGHT && snake.direction != CONST.KEY.LEFT)
+        ))) {
+            snake.nextDirection.push(keyCode);
         }
     }
     
@@ -51,9 +50,8 @@ function Snake() {
     snake.move = function(canvas, boardGrid) {
         var newHead,
             neck = snake.head;
-        if(snake.nextDirection) {
-            snake.direction = snake.nextDirection;
-            snake.nextDirection = null;
+        if(snake.nextDirection.length) {
+            snake.direction = snake.nextDirection.shift();
         }
         switch (snake.direction) {
             case CONST.KEY.UP:
