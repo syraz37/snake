@@ -13,7 +13,7 @@ function swipe(el, callback){
 
     const threshold = 3;
  
-    el.addEventListener('touchmove', function(e){
+    el.addEventListener('touchstart', function(e){
         var touchobj = e.changedTouches[0];
         startX = touchobj.pageX;
         startY = touchobj.pageY;
@@ -26,7 +26,7 @@ function swipe(el, callback){
         if(Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > threshold) {
             direction = distX < 0 ? CONST.DIRETION.LEFT : CONST.DIRETION.RIGHT;
         } else if(Math.abs(distY) > Math.abs(distX) && Math.abs(distY) > threshold) {
-            direction = distX < 0 ? CONST.DIRETION.UP : CONST.DIRETION.DOWN;
+            direction = distY < 0 ? CONST.DIRETION.UP : CONST.DIRETION.DOWN;
         }
         if(prevDirection != direction) {
             prevDirection = direction;
