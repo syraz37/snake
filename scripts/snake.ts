@@ -30,10 +30,10 @@ function Snake() {
 
     snake.changeDirection = function(keyCode) {
         if(snake.nextDirection.length === 1 || (!snake.nextDirection.length && (
-            (keyCode === CONST.KEY.UP && snake.direction != CONST.KEY.DOWN) ||
-            (keyCode === CONST.KEY.DOWN && snake.direction != CONST.KEY.UP) ||
-            (keyCode === CONST.KEY.LEFT && snake.direction != CONST.KEY.RIGHT) ||
-            (keyCode === CONST.KEY.RIGHT && snake.direction != CONST.KEY.LEFT)
+            (keyCode === CONST.DIRETION.UP && snake.direction != CONST.DIRETION.DOWN) ||
+            (keyCode === CONST.DIRETION.DOWN && snake.direction != CONST.DIRETION.UP) ||
+            (keyCode === CONST.DIRETION.LEFT && snake.direction != CONST.DIRETION.RIGHT) ||
+            (keyCode === CONST.DIRETION.RIGHT && snake.direction != CONST.DIRETION.LEFT)
         ))) {
             snake.nextDirection.push(keyCode);
         }
@@ -54,19 +54,19 @@ function Snake() {
             snake.direction = snake.nextDirection.shift();
         }
         switch (snake.direction) {
-            case CONST.KEY.UP:
+            case CONST.DIRETION.UP:
                 newHead = boardGrid[snake.head.x][snake.head.y + 1];
                 snake.head.direction = CONST.DIRETION.UP;
                 break;
-            case CONST.KEY.DOWN:
+            case CONST.DIRETION.DOWN:
                 newHead = boardGrid[snake.head.x][snake.head.y - 1];
                 snake.head.direction = CONST.DIRETION.DOWN;
                 break;
-            case CONST.KEY.LEFT:
+            case CONST.DIRETION.LEFT:
                 newHead = boardGrid[snake.head.x - 1] ? boardGrid[snake.head.x - 1][snake.head.y] : undefined;
                 snake.head.direction = CONST.DIRETION.LEFT;
                 break;
-            case CONST.KEY.RIGHT:
+            case CONST.DIRETION.RIGHT:
                 newHead = boardGrid[snake.head.x + 1] ? boardGrid[snake.head.x + 1][snake.head.y] : undefined;
                 snake.head.direction = CONST.DIRETION.RIGHT;
                 break;

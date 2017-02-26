@@ -3,36 +3,34 @@ import CONST = require("./constants");
 export = new Game();
 
 function Game() {
-    const START = 0, PLAY = 1, PAUSE = 2, END = 3;
-    var game = this;
-    game.state = START;
 
-    game.isStart = function() {
-        return game.state === START;
-    };
+    const NOT_STARTED = 0, 
+        STARTED = 1, 
+        PAUSED = 2, 
+        OVER = 3;
+
+    var game = this;
+
+    game.state = NOT_STARTED;
 
     game.start = function(iterate) {
-        game.state = PLAY;
+        game.state = STARTED;
         game.iterate = iterate;
         game.interval = setInterval(iterate, CONST.UPDATE_TIME);
     };
 
     game.pause = function() {
-        game.state = PAUSE;
+        game.state = PAUSED;
         clearInterval(game.interval);
     };
 
-    game.isPlayed = function() {
-        return game.state == PLAY;
-    };
-
     game.resume = function() {
-        game.state = PLAY;
+        game.state = STARTED;
         game.interval = setInterval(game.iterate, CONST.UPDATE_TIME);
     };
 
     game.pauseResume = function() {
-        if(game.state === PAUSE) {
+        if(game.state === PAUSED) {
             game.resume();
         } else {
             game.pause();
@@ -40,7 +38,15 @@ function Game() {
     };
 
     game.end = function(iterate) {
-        game.state = END;
+        game.state = OVER;
         clearInterval(game.interval);
+    };
+
+    game.isNotStarted = function() {
+        return game.state === NOT_STARTED;
+    };
+
+    game.isStarted = function() {
+        return game.state == STARTED;
     };
 }

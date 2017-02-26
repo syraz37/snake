@@ -66,11 +66,26 @@ import swipe = require("./swipe");
         if(keyCode === CONST.KEY.PAUSE_RESUME) {
             game.pauseResume();
         } else if([CONST.KEY.UP, CONST.KEY.DOWN, CONST.KEY.LEFT, CONST.KEY.RIGHT].indexOf(keyCode) !== -1) {
-            if(game.isStart()) {
-                snake.changeDirection(keyCode);
+            var direction;
+            switch(keyCode) {
+                case CONST.KEY.UP:
+                    direction = CONST.DIRETION.UP;
+                    break;
+                case CONST.KEY.DOWN:
+                    direction = CONST.DIRETION.DOWN;
+                    break;
+                case CONST.KEY.LEFT:
+                    direction = CONST.DIRETION.LEFT;
+                    break;
+                case CONST.KEY.RIGHT:
+                    direction = CONST.DIRETION.RIGHT;
+                    break;
+            }
+            if(game.isNotStarted()) {
+                snake.changeDirection(direction);
                 game.start(updateGameArea);
-            } else if(game.isPlayed()) {
-                snake.changeDirection(keyCode);
+            } else if(game.isStarted()) {
+                snake.changeDirection(direction);
             }
         }
     };
