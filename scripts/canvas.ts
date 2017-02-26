@@ -6,11 +6,12 @@ function Canvas() {
     var canvas = this;
 
     var canvasElement = <HTMLCanvasElement> document.getElementById("canvas");
+    canvas.element = canvasElement;
     canvas.context = canvasElement.getContext('2d');
 
     canvas.init = function(draw) {
-        var windowWidth = window.innerWidth - 20,
-            windowHeight = window.innerHeight - 20;
+        var windowWidth = window.innerWidth - 10,
+            windowHeight = window.innerHeight - 10;
             
         canvas.width = Math.min(windowHeight, windowWidth);
         canvas.width = canvas.width - (canvas.width % CONST.GRID_SIZE);
