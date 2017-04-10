@@ -1,17 +1,22 @@
-import canvas = require("./canvas");
-import board = require("./board");
-import snake = require("./snake");
-import game = require("./game");
+import Canvas = require("./canvas");
+import Board = require("./board");
+import Snake = require("./snake");
+import Game = require("./game");
 import CONST = require("./constants");
 import swipe = require("./swipe");
 
 (function() {
+
+    var game = new Game();
+    var canvas = new Canvas();
+    var board = new Board();
+    var snake = new Snake();
     
     document.body.addEventListener( "touchstart", function (event) {
         event.preventDefault();
     });
 
-    swipe(canvas.element, function(event, direction){
+    swipe(canvas.getElement(), function(event, direction){
         var keyCode;
         switch(direction) {
             case CONST.DIRETION.UP:
@@ -62,7 +67,7 @@ import swipe = require("./swipe");
         processInput(event.keyCode);
     });
 
-    function processInput(keyCode) {
+    function processInput(keyCode: number) {
         if(keyCode === CONST.KEY.PAUSE_RESUME) {
             game.pauseResume();
         } else if([CONST.KEY.UP, CONST.KEY.DOWN, CONST.KEY.LEFT, CONST.KEY.RIGHT].indexOf(keyCode) !== -1) {

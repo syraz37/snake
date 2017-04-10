@@ -1,41 +1,54 @@
 import CONST = require("./constants");
 
-export = new Canvas();
+export = Canvas;
 
-function Canvas() {
-    var canvas = this;
+class Canvas {
 
-    var canvasElement = <HTMLCanvasElement> document.getElementById("canvas");
-    canvas.element = canvasElement;
-    canvas.context = canvasElement.getContext('2d');
+    private element: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
+    public width: number;
+    public gridWidth: number;
 
-    canvas.init = function(draw) {
-        var windowWidth = window.innerWidth - 10,
-            windowHeight = window.innerHeight - 10;
+    constructor() {
+        this.element = <HTMLCanvasElement> document.getElementById("canvas");
+        this.context = this.element.getContext('2d');
+    }
+
+    public init():void {
+        let windowWidth: number = window.innerWidth - 10,
+            windowHeight: number = window.innerHeight - 10;
             
-        canvas.width = Math.min(windowHeight, windowWidth);
-        canvas.width = canvas.width - (canvas.width % CONST.GRID_SIZE);
-        canvas.gridWidth = canvas.width / CONST.GRID_SIZE;
+        this.width = Math.min(windowHeight, windowWidth);
+        this.width = this.width - (this.width % CONST.GRID_SIZE);
+        this.gridWidth = this.width / CONST.GRID_SIZE;
         
-        canvas.context.canvas.width = canvas.width;
-        canvas.context.canvas.height = canvas.width;
+        this.context.canvas.width = this.width;
+        this.context.canvas.height = this.width;
         // translate canvas.context to bottom of canvas
-        canvas.context.translate(0, canvas.width);
+        this.context.translate(0, this.width);
         // flip canvas.context horizontally
-        canvas.context.scale(1, -1);
+        this.context.scale(1, -1);
     };
 
-    canvas.drawRectangle = function(x, y, width, height, fillColor) {
+    public getElement(): HTMLCanvasElement {
+        return this.element;
+    }
+
+    public clear(): void {
+        this.context.clearRect(0, 0, this.width, this.width);
+    }
+
+    public drawRectangle(x: number, y: number, width: number, height: number, fillColor: string): void {
         if(fillColor) {
-            canvas.context.fillStyle = fillColor;
-            canvas.context.fillRect(x, y, width, height);
+            this.context.fillStyle = fillColor;
+            this.context.fillRect(x, y, width, height);
         } else {
-            canvas.context.rect(x, y, width, height);
-            canvas.context.stroke();
+            this.context.rect(x, y, width, height);
+            this.context.stroke();
         }
     }
 
-    canvas.drawSquare = function(x, y, length, fillColor) {
-        canvas.drawRectangle(x, y, length, length, fillColor);
+    public drawSquare(x: number, y: number, length: number, fillColor: string): void {
+        this.drawRectangle(x, y, length, length, fillColor);
     }
 }

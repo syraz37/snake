@@ -1,32 +1,39 @@
 import CONST = require("./constants");
+import Canvas = require("./canvas");
 
-export = new Board();
+export = Board;
 
-function Board() {
-    var board = this;
+class Board {
 
-    board.grid = [];
-    board.plain = [];
-    for(var i = 0; i < CONST.GRID_SIZE; i++) {
-        board.grid.push([]);
-        for(var j = 0; j < CONST.GRID_SIZE; j++) {
-            var grid = {x: i, y: j};
-            board.grid[i].push(grid);
-            board.plain.push(grid);
+    private grid: Array<Array<ISnake.Grid>>;
+    private plain: Array<ISnake.Grid>;
+
+
+    constructor() {
+        this.grid = [];
+        this.plain = [];
+        for(let i: number = 0; i < CONST.GRID_SIZE; i++) {
+            this.grid.push([]);
+            for(let j: number = 0; j < CONST.GRID_SIZE; j++) {
+                let grid: ISnake.Grid = {x: i, y: j};
+                this.grid[i].push(grid);
+                this.plain.push(grid);
+            }
         }
     }
 
-    board.getGrid = function() {
-        return board.grid;
+
+    public getGrid(): Array<Array<ISnake.Grid>> {
+        return this.grid;
     };
 
-    board.getPlain = function() {
-        return board.plain;
+    public getPlain(): Array<ISnake.Grid> {
+        return this.plain;
     }
 
-    board.draw = function(canvas){
-        canvas.context.clearRect(0, 0, canvas.width, canvas.width);
-        board.plain.forEach(function(grid){
+    public draw(canvas: Canvas){
+        canvas.clear();
+        this.plain.forEach(function(grid: ISnake.Grid){
             canvas.drawSquare(grid.x * canvas.gridWidth, grid.y * canvas.gridWidth, canvas.gridWidth, CONST.BOARD_COLOR);
         });
     }

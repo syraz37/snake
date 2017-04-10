@@ -1,100 +1,101 @@
 import CONST = require("./constants");
+import Canvas = require("./canvas");
 
-export = new Snake();
+export = Snake;
 
-function Snake() {
-    var snake = this;
-    snake.head = null;
-    snake.tail = null;
-    snake.direction = null;
-    snake.nextDirection = [];
+class Snake {
+    
+    private head: ISnake.Grid = null;
+    private tail: ISnake.Grid = null;
+    private direction: string;
+    private nextDirection: Array<string> = [];
 
-    snake.create = function(boardGrid) {
+    public create(boardGrid: Array<Array<ISnake.Grid>>): void {
         // snake.head = boardGrid[1][1];
         // snake.tail = boardGrid[2][1];
         // snake.head.next = snake.tail;
         // snake.tail.prev = snake.head;
         
-        for(var i = 0; i < CONST.SNAKE_SIZE; i++) {
-            var grid = boardGrid[i][0];
+        for(let i: number = 0; i < CONST.SNAKE_SIZE; i++) {
+            const grid = boardGrid[i][0];
             grid.prev = boardGrid[i+1][0];
             grid.direction = CONST.DIRETION.RIGHT;
             if(i) {
                 grid.next = boardGrid[i - 1][0];
             }
         }
-        snake.head = boardGrid[CONST.SNAKE_SIZE - 1][0];
-        snake.head.prev = null;
-        snake.tail = boardGrid[0][0];
+        this.head = boardGrid[CONST.SNAKE_SIZE - 1][0];
+        this.head.prev = null;
+        this.tail = boardGrid[0][0];
     };
 
-    snake.changeDirection = function(keyCode) {
-        if(snake.nextDirection.length === 1 || (!snake.nextDirection.length && (
-            (keyCode === CONST.DIRETION.UP && snake.direction != CONST.DIRETION.DOWN) ||
-            (keyCode === CONST.DIRETION.DOWN && snake.direction != CONST.DIRETION.UP) ||
-            (keyCode === CONST.DIRETION.LEFT && snake.direction != CONST.DIRETION.RIGHT) ||
-            (keyCode === CONST.DIRETION.RIGHT && snake.direction != CONST.DIRETION.LEFT)
+    public changeDirection(keyCode: string): void {
+        if(this.nextDirection.length === 1 || (!this.nextDirection.length && (
+            (keyCode === CONST.DIRETION.UP && this.direction != CONST.DIRETION.DOWN) ||
+            (keyCode === CONST.DIRETION.DOWN && this.direction != CONST.DIRETION.UP) ||
+            (keyCode === CONST.DIRETION.LEFT && this.direction != CONST.DIRETION.RIGHT) ||
+            (keyCode === CONST.DIRETION.RIGHT && this.direction != CONST.DIRETION.LEFT)
         ))) {
-            snake.nextDirection.push(keyCode);
+            this.nextDirection.push(keyCode);
         }
     }
     
-    snake.draw = function(canvas){
-        var snakeParts = snake.head;
+    public draw(canvas: Canvas): void{
+        let snakeParts = this.head;
         while (snakeParts) {
             canvas.drawSquare(snakeParts.x * canvas.gridWidth, snakeParts.y * canvas.gridWidth, canvas.gridWidth, CONST.SNAKE_COLOR);
             snakeParts = snakeParts.next;
         }
     }
     
-    snake.move = function(canvas, boardGrid) {
-        var newHead,
-            neck = snake.head;
-        if(snake.nextDirection.length) {
-            snake.direction = snake.nextDirection.shift();
+    public move(canvas: Canvas, boardGrid: Array<Array<ISnake.Grid>>): boolean {
+        let newHead: ISnake.Grid,
+            neck: ISnake.Grid = this.head;
+        if(this.nextDirection.length) {
+            this.direction = this.nextDirection.shift();
         }
-        switch (snake.direction) {
+        switch (this.direction) {
             case CONST.DIRETION.UP:
-                newHead = boardGrid[snake.head.x][snake.head.y + 1];
-                snake.head.direction = CONST.DIRETION.UP;
+                newHead = boardGrid[this.head.x][this.head.y + 1];
+                this.head.direction = CONST.DIRETION.UP;
                 break;
             case CONST.DIRETION.DOWN:
-                newHead = boardGrid[snake.head.x][snake.head.y - 1];
-                snake.head.direction = CONST.DIRETION.DOWN;
+                newHead = boardGrid[this.head.x][this.head.y - 1];
+                this.head.direction = CONST.DIRETION.DOWN;
                 break;
             case CONST.DIRETION.LEFT:
-                newHead = boardGrid[snake.head.x - 1] ? boardGrid[snake.head.x - 1][snake.head.y] : undefined;
-                snake.head.direction = CONST.DIRETION.LEFT;
+                newHead = boardGrid[this.head.x - 1] ? boardGrid[this.head.x - 1][this.head.y] : undefined;
+                this.head.direction = CONST.DIRETION.LEFT;
                 break;
             case CONST.DIRETION.RIGHT:
-                newHead = boardGrid[snake.head.x + 1] ? boardGrid[snake.head.x + 1][snake.head.y] : undefined;
-                snake.head.direction = CONST.DIRETION.RIGHT;
+                newHead = boardGrid[this.head.x + 1] ? boardGrid[this.head.x + 1][this.head.y] : undefined;
+                this.head.direction = CONST.DIRETION.RIGHT;
                 break;
         }
-        if(newHead && !snake.biteItself(newHead)) {
-            newHead.direction = snake.head.direction;
-            snake.head = newHead
-            snake.head.next = neck;
-            neck.prev = snake.head;
+        if(newHead && !this.biteItself(newHead)) {
+            newHead.direction = this.head.direction;
+            this.head = newHead
+            this.head.next = neck;
+            neck.prev = this.head;
         } else {
             return false;
         }
 
-        snake.animateMove(canvas);
+        this.animateMove(canvas);
 
-        snake.tail = snake.tail.prev;
-        snake.tail.next.prev = null;
-        snake.tail.next = null;
+        this.tail = this.tail.prev;
+        this.tail.next.prev = null;
+        this.tail.next = null;
 
         return true;
     }
 
-    snake.animateMove = function(canvas) {
-        var length = canvas.gridWidth,
-            headMoveData = snake.generateMoveData(snake.head, length),
-            tailMoveData = snake.generateMoveData(snake.tail, length);
+    public animateMove(canvas: Canvas): void {
+        const length = canvas.gridWidth,
+            headMoveData = this.generateMoveData(this.head, length),
+            tailMoveData = this.generateMoveData(this.tail, length);
 
-        for(var i = 0, j = 0; i < CONST.FPM; i++) {
+        for(let i: number = 0, j: number = 0; i < CONST.FPM; i++) {
             setTimeout(function(){
                 canvas.drawRectangle(headMoveData[j].x, headMoveData[j].y, headMoveData[j].length, headMoveData[j].height, CONST.SNAKE_COLOR);
                 canvas.drawRectangle(tailMoveData[j].x, tailMoveData[j].y, tailMoveData[j].length, tailMoveData[j].height, CONST.BOARD_COLOR);
@@ -104,12 +105,12 @@ function Snake() {
 
     }
 
-    snake.generateMoveData = function(grid, length) {
-        var moveData = [];
+    public generateMoveData(grid: ISnake.Grid, length: number): Array<any> {
+        var moveData: Array<any> = [];
 
         switch (grid.direction) {
             case CONST.DIRETION.UP:
-                for(var i = 1; i <= CONST.FPM; i++) {
+                for(let i: number = 1; i <= CONST.FPM; i++) {
                     moveData.push({
                         x: grid.x * length,
                         y: grid.y * length,
@@ -119,7 +120,7 @@ function Snake() {
                 }
                 break;
             case CONST.DIRETION.DOWN:
-                for(var i = 1; i <= CONST.FPM; i++) {
+                for(let i: number = 1; i <= CONST.FPM; i++) {
                     moveData.push({
                         x: grid.x * length,
                         y: ((grid.y + 1) * length) - (i * length / CONST.FPM),
@@ -129,7 +130,7 @@ function Snake() {
                 }
                 break;
             case CONST.DIRETION.LEFT:
-                for(var i = 1; i <= CONST.FPM; i++) {
+                for(let i: number = 1; i <= CONST.FPM; i++) {
                     moveData.push({
                         x: ((grid.x + 1) * length) - (i  * length / CONST.FPM),
                         y: grid.y * length,
@@ -139,7 +140,7 @@ function Snake() {
                 }
                 break;
             case CONST.DIRETION.RIGHT:
-                for(var i = 1; i <= CONST.FPM; i++) {
+                for(let i: number = 1; i <= CONST.FPM; i++) {
                     moveData.push({
                         x: grid.x * length,
                         y: grid.y * length,
@@ -152,8 +153,8 @@ function Snake() {
         return moveData;
     };
 
-    snake.biteItself = function(newHead) {
-        var snakeParts = snake.head;
+    public biteItself(newHead: ISnake.Grid): boolean {
+        let snakeParts: ISnake.Grid = this.head;
         while (snakeParts) {
             if(newHead === snakeParts) {
                 return true;

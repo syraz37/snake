@@ -1,52 +1,61 @@
 import CONST = require("./constants");
 
-export = new Game();
+export = Game;
 
-function Game() {
+enum GameState {
+    NOT_STARTED,
+    STARTED,
+    PAUSED,
+    OVER
+}
 
-    const NOT_STARTED = 0, 
-        STARTED = 1, 
-        PAUSED = 2, 
-        OVER = 3;
+/**
+ * Game
+ */
+class Game {
 
-    var game = this;
+    private state: GameState;
+    private iterate: Function;
+    private interval: number;
 
-    game.state = NOT_STARTED;
+    constructor() {
+        this.state = GameState.NOT_STARTED;
+    }
 
-    game.start = function(iterate) {
-        game.state = STARTED;
-        game.iterate = iterate;
-        game.interval = setInterval(iterate, CONST.UPDATE_TIME);
+    public start(iterate: Function): void {
+        this.state = GameState.STARTED;
+        this.iterate = iterate;
+        this.interval = setInterval(iterate, CONST.UPDATE_TIME);
     };
 
-    game.pause = function() {
-        game.state = PAUSED;
-        clearInterval(game.interval);
+    public pause(): void {
+        this.state = GameState.PAUSED;
+        clearInterval(this.interval);
     };
 
-    game.resume = function() {
-        game.state = STARTED;
-        game.interval = setInterval(game.iterate, CONST.UPDATE_TIME);
+    public resume(): void {
+        this.state = GameState.STARTED;
+        this.interval = setInterval(this.iterate, CONST.UPDATE_TIME);
     };
 
-    game.pauseResume = function() {
-        if(game.state === PAUSED) {
-            game.resume();
+    public pauseResume(): void {
+        if(this.state === GameState.PAUSED) {
+            this.resume();
         } else {
-            game.pause();
+            this.pause();
         }
     };
 
-    game.end = function(iterate) {
-        game.state = OVER;
-        clearInterval(game.interval);
+    public end(): void {
+        this.state = GameState.OVER;
+        clearInterval(this.interval);
     };
 
-    game.isNotStarted = function() {
-        return game.state === NOT_STARTED;
+    public isNotStarted(): boolean {
+        return this.state === GameState.NOT_STARTED;
     };
 
-    game.isStarted = function() {
-        return game.state == STARTED;
+    public isStarted(): boolean {
+        return this.state == GameState.STARTED;
     };
 }

@@ -2,9 +2,13 @@
     "compilerOptions": {
         "module": "commonjs",
         "outDir": "js",
-        "sourceMap": true
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "noEmitOnError": true,
+        "removeComments": false
     },
     "files": [
-        "./scripts/app.ts"
+        "./scripts/app.ts",
+        "./scripts/app.d.ts"
     ]
 }
