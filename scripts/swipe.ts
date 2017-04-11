@@ -2,25 +2,25 @@ import CONST = require("./constants");
 
 export = swipe;
 
-function swipe(el, callback){
- 
-    var prevDirection,
-        direction,
-        startX,
-        startY,
-        distX,
-        distY;
+function swipe(el: HTMLCanvasElement, callback: Function): void{
+    
+    let prevDirection: string,
+        direction: string,
+        startX: number,
+        startY: number,
+        distX: number,
+        distY: number;
 
     const threshold = 3;
  
-    el.addEventListener('touchstart', function(e){
-        var touchobj = e.changedTouches[0];
+    el.addEventListener('touchstart', function(e: TouchEvent){
+        const touchobj: Touch = e.changedTouches[0];
         startX = touchobj.pageX;
         startY = touchobj.pageY;
     }, false);
 
-    el.addEventListener('touchmove', function(e) {
-        var touchobj = e.changedTouches[0];
+    el.addEventListener('touchmove', function(e: TouchEvent) {
+        const touchobj = e.changedTouches[0];
         distX = touchobj.pageX - startX;
         distY = touchobj.pageY - startY;
         if(Math.abs(distX) > Math.abs(distY) && Math.abs(distX) > threshold) {

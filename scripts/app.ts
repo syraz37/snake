@@ -12,12 +12,12 @@ import swipe = require("./swipe");
     var board = new Board();
     var snake = new Snake();
     
-    document.body.addEventListener( "touchstart", function (event) {
+    document.body.addEventListener( "touchstart", function (event: Event) {
         event.preventDefault();
     });
 
-    swipe(canvas.getElement(), function(event, direction){
-        var keyCode;
+    swipe(canvas.getElement(), function(event: TouchEvent, direction: string){
+        let keyCode: number;
         switch(direction) {
             case CONST.DIRETION.UP:
                 keyCode = CONST.KEY.UP;
@@ -49,10 +49,9 @@ import swipe = require("./swipe");
     //     e++;
     // }, 4000);
 
-
     snake.create(board.getGrid());
 
-    function drawCanvas() {
+    function drawCanvas(): void {
         canvas.init();
         board.draw(canvas);
         snake.draw(canvas);
@@ -67,11 +66,11 @@ import swipe = require("./swipe");
         processInput(event.keyCode);
     });
 
-    function processInput(keyCode: number) {
+    function processInput(keyCode: number): void {
         if(keyCode === CONST.KEY.PAUSE_RESUME) {
             game.pauseResume();
         } else if([CONST.KEY.UP, CONST.KEY.DOWN, CONST.KEY.LEFT, CONST.KEY.RIGHT].indexOf(keyCode) !== -1) {
-            var direction;
+            let direction;
             switch(keyCode) {
                 case CONST.KEY.UP:
                     direction = CONST.DIRETION.UP;
@@ -95,7 +94,7 @@ import swipe = require("./swipe");
         }
     };
 
-    function updateGameArea() {
+    function updateGameArea(): void {
         if(!snake.move(canvas, board.getGrid())) {
             game.end();
         }

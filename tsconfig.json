@@ -3,7 +3,7 @@
         "module": "commonjs",
         "outDir": "js",
         "sourceMap": true,
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "noEmitOnError": true,
         "removeComments": false
     },
