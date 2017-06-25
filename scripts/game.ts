@@ -58,4 +58,8 @@ class Game {
     public isStarted(): boolean {
         return this.state == GameState.STARTED;
     };
+
+    public isEnd(): boolean {
+        return this.state == GameState.OVER;
+    };
 }

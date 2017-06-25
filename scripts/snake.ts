@@ -10,23 +10,38 @@ class Snake {
     private direction: string;
     private nextDirection: Array<string> = [];
 
-    public create(boardGrid: Array<Array<ISnake.Grid>>): void {
+    public create(boardGrid: Array<Array<ISnake.Grid>>, type: number): void {
         // snake.head = boardGrid[1][1];
         // snake.tail = boardGrid[2][1];
         // snake.head.next = snake.tail;
         // snake.tail.prev = snake.head;
         
-        for(let i: number = 0; i < CONST.SNAKE_SIZE; i++) {
-            const grid = boardGrid[i][0];
-            grid.prev = boardGrid[i+1][0];
-            grid.direction = CONST.DIRETION.RIGHT;
-            if(i) {
-                grid.next = boardGrid[i - 1][0];
+        if(type === 1) {
+            for(let i: number = 0; i < CONST.SNAKE_SIZE; i++) {
+                const grid = boardGrid[i][0];
+                grid.prev = boardGrid[i+1][0];
+                grid.direction = CONST.DIRETION.RIGHT;
+                if(i) {
+                    grid.next = boardGrid[i - 1][0];
+                }
             }
+            this.head = boardGrid[CONST.SNAKE_SIZE - 1][0];
+            this.head.prev = null;
+            this.tail = boardGrid[0][0];
+        } else if(type === 2) {
+            for(let i: number = CONST.GRID_SIZE - 1; i >= CONST.GRID_SIZE - CONST.SNAKE_SIZE; i--) {
+                const grid = boardGrid[i][CONST.GRID_SIZE - 1];
+                grid.prev = boardGrid[i-1][CONST.GRID_SIZE - 1];
+                grid.direction = CONST.DIRETION.LEFT;
+                if(i !== CONST.GRID_SIZE - 1) {
+                    grid.next = boardGrid[i + 1][CONST.GRID_SIZE - 1];
+                }
+            }
+            this.head = boardGrid[CONST.GRID_SIZE - CONST.SNAKE_SIZE][CONST.GRID_SIZE - 1];
+            this.head.prev = null;
+            this.tail = boardGrid[CONST.GRID_SIZE - 1][CONST.GRID_SIZE - 1];
         }
-        this.head = boardGrid[CONST.SNAKE_SIZE - 1][0];
-        this.head.prev = null;
-        this.tail = boardGrid[0][0];
+
     };
 
     public changeDirection(keyCode: string): void {
@@ -95,7 +110,7 @@ class Snake {
             headMoveData = this.generateMoveData(this.head, length),
             tailMoveData = this.generateMoveData(this.tail, length);
 
-        for(let i: number = 0, j: number = 0; i < CONST.FPM; i++) {
+        for(var i: number = 0, j: number = 0; i < CONST.FPM; i++) {
             setTimeout(function(){
                 canvas.drawRectangle(headMoveData[j].x, headMoveData[j].y, headMoveData[j].length, headMoveData[j].height, CONST.SNAKE_COLOR);
                 canvas.drawRectangle(tailMoveData[j].x, tailMoveData[j].y, tailMoveData[j].length, tailMoveData[j].height, CONST.BOARD_COLOR);

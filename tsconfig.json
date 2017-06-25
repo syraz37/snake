@@ -3,9 +3,14 @@
         "module": "commonjs",
         "outDir": "js",
         "sourceMap": true,
-        "noImplicitAny": true,
+        // "noImplicitAny": true,
         "noEmitOnError": true,
-        "removeComments": false
+        "removeComments": false,
+        "baseUrl": ".",
+        "paths": {
+            "jquery": ["node_modules/jquery/dist/jquery"],
+            "socket.io-client": ["node_modules/socket.io-client/dist/sicket.io"]
+        }
     },
     "files": [
         "./scripts/app.ts",

@@ -3,14 +3,37 @@ import Board = require("./board");
 import Snake = require("./snake");
 import Game = require("./game");
 import CONST = require("./constants");
+
 import swipe = require("./swipe");
+
+import $ = require("jquery");
+import io = require("socket.io-client");
+
+require("../styles/style.scss");
 
 (function() {
 
-    var game = new Game();
     var canvas = new Canvas();
-    var board = new Board();
-    var snake = new Snake();
+    var game = new Game();
+    var board: Board;
+    var snake: Snake;
+    var snake2: Snake;
+
+    $('#play').on('click', function() {
+        var socket: SocketIOClient.Socket = io.connect();
+    });
+    $('#restart').on('click', startGame);
+
+    function startGame() {
+        game.end();
+        board = new Board();
+        snake = new Snake();
+        snake2 = new Snake();
+        snake.create(board.getGrid(), 1);
+        snake2.create(board.getGrid(), 2);
+        drawCanvas();
+    }
+
     
     document.body.addEventListener( "touchstart", function (event: Event) {
         event.preventDefault();
@@ -49,15 +72,12 @@ import swipe = require("./swipe");
     //     e++;
     // }, 4000);
 
-    snake.create(board.getGrid());
-
     function drawCanvas(): void {
         canvas.init();
         board.draw(canvas);
         snake.draw(canvas);
+        snake2.draw(canvas);
     }
-
-    drawCanvas();
 
     window.addEventListener('resize', drawCanvas, false);
 
@@ -70,7 +90,7 @@ import swipe = require("./swipe");
         if(keyCode === CONST.KEY.PAUSE_RESUME) {
             game.pauseResume();
         } else if([CONST.KEY.UP, CONST.KEY.DOWN, CONST.KEY.LEFT, CONST.KEY.RIGHT].indexOf(keyCode) !== -1) {
-            let direction;
+            let direction: string;
             switch(keyCode) {
                 case CONST.KEY.UP:
                     direction = CONST.DIRETION.UP;
@@ -85,18 +105,35 @@ import swipe = require("./swipe");
                     direction = CONST.DIRETION.RIGHT;
                     break;
             }
-            if(game.isNotStarted()) {
+            if(game.isNotStarted() || game.isEnd()) {
                 snake.changeDirection(direction);
+                snake2.changeDirection(oppositeDirection(direction));
                 game.start(updateGameArea);
             } else if(game.isStarted()) {
                 snake.changeDirection(direction);
+                snake2.changeDirection(oppositeDirection(direction));
             }
         }
     };
 
     function updateGameArea(): void {
-        if(!snake.move(canvas, board.getGrid())) {
+        if(!snake.move(canvas, board.getGrid()) || !snake2.move(canvas, board.getGrid())) {
             game.end();
+        }
+    }
+
+    function oppositeDirection(direction: string): string {
+        switch (direction) {
+            case CONST.DIRETION.UP:
+                return CONST.DIRETION.DOWN;
+            case CONST.DIRETION.DOWN:
+                return CONST.DIRETION.UP;
+            case CONST.DIRETION.LEFT:
+                return CONST.DIRETION.RIGHT;
+            case CONST.DIRETION.RIGHT:
+                return CONST.DIRETION.LEFT;
+            default:
+                return direction;
         }
     }
 
