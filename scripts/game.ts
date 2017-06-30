@@ -1,7 +1,5 @@
 import CONST = require("./constants");
 
-export = Game;
-
 enum GameState {
     NOT_STARTED,
     STARTED,
@@ -12,7 +10,7 @@ enum GameState {
 /**
  * Game
  */
-class Game {
+export default class Game {
 
     private state: GameState;
     private iterate: Function;

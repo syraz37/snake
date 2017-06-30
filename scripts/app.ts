@@ -1,10 +1,10 @@
-import Canvas = require("./canvas");
-import Board = require("./board");
-import Snake = require("./snake");
-import Game = require("./game");
+import Canvas from "./canvas";
+import Board from "./board";
+import Snake from "./snake";
+import Game from "./game";
 import CONST = require("./constants");
 
-import swipe = require("./swipe");
+import swipe = require( "./swipe");
 
 import $ = require("jquery");
 import io = require("socket.io-client");
@@ -21,6 +21,10 @@ require("../styles/style.scss");
 
     $('#play').on('click', function() {
         var socket: SocketIOClient.Socket = io.connect();
+
+        socket.on('joined', function(data) {
+            console.log(data);
+        });
     });
     $('#restart').on('click', startGame);
 
