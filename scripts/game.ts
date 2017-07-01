@@ -3,8 +3,6 @@ import Canvas = require("./canvas");
 import Board = require("./board");
 import Snake = require("./snake");
 
-export = Game;
-
 enum GameState {
     NOT_STARTED,
     STARTED,
@@ -15,7 +13,7 @@ enum GameState {
 /**
  * Game
  */
-class Game {
+export default class Game {
 
     private canvas: Canvas;
     private state: GameState;

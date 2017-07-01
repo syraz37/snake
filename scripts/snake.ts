@@ -1,9 +1,7 @@
 import CONST = require("./constants");
-import Canvas = require("./canvas");
+import Canvas from "./canvas";
 
-export = Snake;
-
-class Snake {
+export default class Snake {
     
     private head: ISnake.Grid = null;
     private tail: ISnake.Grid = null;

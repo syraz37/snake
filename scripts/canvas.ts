@@ -1,8 +1,6 @@
 import CONST = require("./constants");
 
-export = Canvas;
-
-class Canvas {
+export default class Canvas {
 
     private element: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;

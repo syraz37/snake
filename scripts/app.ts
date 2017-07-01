@@ -1,8 +1,8 @@
-import Canvas = require("./canvas");
-import Game = require("./game");
+import Canvas from "./canvas";
+import Game from "./game";
 import CONST = require("./constants");
 
-import swipe = require("./swipe");
+import swipe = require( "./swipe");
 
 import $ = require("jquery");
 import io = require("socket.io-client");
@@ -19,6 +19,9 @@ require("../styles/style.scss");
 
     $('#play').on('click', function() {
         socket = io.connect('http://45.62.243.184:3000/');
+        socket.on('joined', function(data) {
+            console.log(data);
+        });
         $(canvas.getElement()).show();
         startGame();
     });

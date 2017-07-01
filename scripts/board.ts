@@ -1,9 +1,7 @@
 import CONST = require("./constants");
-import Canvas = require("./canvas");
+import Canvas from "./canvas";
 
-export = Board;
-
-class Board {
+export default class Board {
 
     private grid: Array<Array<ISnake.Grid>>;
     private plain: Array<ISnake.Grid>;

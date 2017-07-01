@@ -24,7 +24,7 @@ io.sockets.on('connection', function(socket) {
     socket.user = {
         id: 1
     }
-    socket.emit('joined', { numPlayer: users.length });
+    socket.emit('joined', { numPlayer: connections.length });
 
     socket.on('move', function (data) {
         console.log(data);
