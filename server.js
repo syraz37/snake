@@ -26,7 +26,7 @@ io.sockets.on('connection', function(socket) {
     }
     socket.emit('joined', { numPlayer: users.length });
 
-    socket.on('my other event', function (data) {
+    socket.on('move', function (data) {
         console.log(data);
     });
 
