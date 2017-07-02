@@ -13,7 +13,7 @@ require("../styles/style.scss");
 
     var canvas = new Canvas();
     var game= new Game(canvas);
-    var socket: SocketIOClient.Socket;
+    var socket;
 
     $(canvas.getElement()).hide();
 
