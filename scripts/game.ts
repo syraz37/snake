@@ -1,7 +1,7 @@
 import CONST = require("./constants");
-import Canvas = require("./canvas");
-import Board = require("./board");
-import Snake = require("./snake");
+import Canvas from "./canvas";
+import Board from "./board";
+import Snake from "./snake";
 
 enum GameState {
     NOT_STARTED,

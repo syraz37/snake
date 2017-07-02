@@ -18,7 +18,7 @@ require("../styles/style.scss");
     $(canvas.getElement()).hide();
 
     $('#play').on('click', function() {
-        socket = io.connect('http://45.62.243.184:3000/');
+        socket = io.connect();
         socket.on('joined', function(data) {
             console.log(data);
         });
