@@ -2,7 +2,6 @@ var express = require('express'),
     app = express(),
     server = require('http').createServer(app),
     io = require('socket.io').listen(server),
-    users = [],
     connections = [];
 
 app.use('/assets', express.static('assets'));
@@ -19,15 +18,19 @@ io.sockets.on('connection', function(socket) {
 
     connections.push(socket);
     console.log('Connected: %s sockets connected', connections.length);
-
-    users.push('Player ' + users.length);
-    socket.user = {
-        id: 1
+    socket.emit('join');
+    if(connections.length === 2) {
+        socket.emit('start');
+        connections[0].emit('start');
     }
-    socket.emit('joined', { numPlayer: connections.length });
 
-    socket.on('move', function (data) {
+    socket.on('changeDirection', function (data) {
         console.log(data);
+        if(socket == connections[0]) {
+            connections[1].emit('changeDirection', data);
+        } else {
+            connections[0].emit('changeDirection', data);
+        }
     });
 
     socket.on('disconnect', function(socket) {

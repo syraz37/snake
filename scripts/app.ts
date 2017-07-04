@@ -1,45 +1,27 @@
-import Canvas from "./canvas";
 import Game from "./game";
 import CONST = require("./constants");
 
 import swipe = require( "./swipe");
 
 import $ = require("jquery");
-import io = require("socket.io-client");
 
 require("../styles/style.scss");
 
 (function() {
 
-    var canvas = new Canvas();
-    var game= new Game(canvas);
-    var socket;
-
-    $(canvas.getElement()).hide();
+    var game: Game;
 
     $('#play').on('click', function() {
-        socket = io.connect();
-        socket.on('joined', function(data) {
-            console.log(data);
-        });
-        $(canvas.getElement()).show();
-        startGame();
+        game = new Game();
     });
 
-    $('#restart').on('click', startGame);
-
-    function startGame() {
-        game.init();
-        game.drawCanvas();
-    }
-
-    window.addEventListener('resize', game.drawCanvas, false);
+    // $('#restart').on('click', startGame);
     
     document.body.addEventListener( "touchstart", function (event: Event) {
         event.preventDefault();
     });
 
-    swipe(canvas.getElement(), function(event: TouchEvent, direction: string){
+    swipe(<HTMLCanvasElement> document.getElementById("canvas"), function(event: TouchEvent, direction: string){
         let keyCode: number;
         switch(direction) {
             case CONST.DIRETION.UP:
@@ -60,25 +42,12 @@ require("../styles/style.scss");
         }
     });
 
-    // var e = 0
-    // setInterval(function() {
-    //     if(e%2 == 0) {
-    //         processInput(CONST.KEY.UP);
-    //         processInput(CONST.KEY.LEFT);
-    //     } else {
-    //         processInput(CONST.KEY.UP);
-    //         processInput(CONST.KEY.RIGHT);
-    //     }
-    //     e++;
-    // }, 4000);
-
     window.addEventListener('keydown', function (event) {
         event.preventDefault();
         processInput(event.keyCode);
     });
 
     function processInput(keyCode: number): void {
-        socket.emit('move', keyCode);
         if(keyCode === CONST.KEY.PAUSE_RESUME) {
             game.pauseResume();
         } else if([CONST.KEY.UP, CONST.KEY.DOWN, CONST.KEY.LEFT, CONST.KEY.RIGHT].indexOf(keyCode) !== -1) {

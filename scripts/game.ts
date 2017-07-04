@@ -1,7 +1,11 @@
 import CONST = require("./constants");
 import Canvas from "./canvas";
+import Connection from "./connection";
 import Board from "./board";
 import Snake from "./snake";
+import AnimationInterval from "./animationInterval";
+
+import $ = require("jquery");
 
 enum GameState {
     NOT_STARTED,
@@ -16,27 +20,41 @@ enum GameState {
 export default class Game {
 
     private canvas: Canvas;
+    private connection: Connection;
     private state: GameState;
-    private iterate: Function;
-    private interval: number;
+    private interval: AnimationInterval;
     private board: Board;
     private snake: Snake;
     private snake2: Snake;
 
-    constructor(canvas: Canvas) {
-        this.canvas = canvas;
+    constructor() {
         this.state = GameState.NOT_STARTED;
-    }
 
-    public init(): void {
-        if(this.interval) {
-            this.end();
-        }
+        this.canvas = new Canvas();
         this.board = new Board();
         this.snake = new Snake();
         this.snake2 = new Snake();
+
         this.snake.create(this.board.getGrid(), 1);
         this.snake2.create(this.board.getGrid(), 2);
+        this.snake.changeDirection(CONST.DIRETION.UP);
+        this.snake2.changeDirection(CONST.DIRETION.DOWN);
+
+        this.drawCanvas();
+        
+        $(this.canvas.getElement()).show();
+        window.addEventListener('resize', this.drawCanvas, false);
+
+        this.connection = new Connection();
+        var game = this;
+        this.connection.onStart(function(data) {
+            console.log(data);
+            game.start();
+        });
+        this.connection.onChangeDirection(function(data) {
+            console.log(data);
+            game.snake2.changeDirection(game.oppositeDirection(data.direction));
+        });
     }
 
     public drawCanvas = (): void => {
@@ -46,20 +64,19 @@ export default class Game {
         this.snake2.draw(this.canvas);
     }
 
-    public start(iterate: Function): void {
+    public start(): void {
         this.state = GameState.STARTED;
-        this.iterate = iterate;
-        this.interval = setInterval(iterate, CONST.UPDATE_TIME);
+        this.interval = new AnimationInterval(this.updateGameArea, CONST.UPDATE_TIME);
     };
 
     public pause(): void {
         this.state = GameState.PAUSED;
-        clearInterval(this.interval);
+        this.interval.clearAnimationInterval();
     };
 
     public resume(): void {
         this.state = GameState.STARTED;
-        this.interval = setInterval(this.iterate, CONST.UPDATE_TIME);
+        this.interval = new AnimationInterval(this.updateGameArea, CONST.UPDATE_TIME);
     };
 
     public pauseResume(): void {
@@ -72,30 +89,12 @@ export default class Game {
 
     public end(): void {
         this.state = GameState.OVER;
-        clearInterval(this.interval);
-    };
-
-    public isNotStarted(): boolean {
-        return this.state === GameState.NOT_STARTED;
-    };
-
-    public isStarted(): boolean {
-        return this.state == GameState.STARTED;
-    };
-
-    public isEnd(): boolean {
-        return this.state == GameState.OVER;
+        this.interval.clearAnimationInterval();
     };
 
     public processInput(direction: string) {
-        if(this.isNotStarted() || this.isEnd()) {
-            this.snake.changeDirection(direction);
-            this.snake2.changeDirection(this.oppositeDirection(direction));
-            this.start(this.updateGameArea);
-        } else if(this.isStarted()) {
-            this.snake.changeDirection(direction);
-            this.snake2.changeDirection(this.oppositeDirection(direction));
-        }
+        this.connection.changeDirection(direction);
+        this.snake.changeDirection(direction);
     }
 
     private oppositeDirection(direction: string): string {

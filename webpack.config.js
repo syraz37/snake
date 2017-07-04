@@ -16,6 +16,11 @@ module.exports = {
     },
     // Add minification
     plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                'ENV': JSON.stringify('prod'),
+            }
+        }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor' // Specify the common bundle's name.
         }),
